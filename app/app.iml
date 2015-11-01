@@ -141,5 +141,6 @@
     <orderEntry type="library" exported="" name="tweet-composer-1.0.1" level="project" />
     <orderEntry type="library" exported="" name="twitter-core-1.6.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-plus-8.1.0" level="project" />
+    <orderEntry type="module" module-name="LinkedIn" exported="" />
   </component>
 </module>

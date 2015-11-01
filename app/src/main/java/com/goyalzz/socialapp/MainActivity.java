@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -33,6 +34,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.plus.Plus;
 import com.google.android.gms.plus.model.people.Person;
+import com.linkedin.platform.APIHelper;
+import com.linkedin.platform.AccessToken;
+import com.linkedin.platform.LISessionManager;
+import com.linkedin.platform.errors.LIApiError;
+import com.linkedin.platform.errors.LIAuthError;
+import com.linkedin.platform.listeners.ApiListener;
+import com.linkedin.platform.listeners.ApiResponse;
+import com.linkedin.platform.listeners.AuthListener;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterException;
@@ -159,7 +168,48 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        ImageView linkedin = (ImageView) findViewById(R.id.linkedin);
+        linkedin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //        LISessionManager.getInstance(getApplicationContext()).init(AccessToken accessToken);
+                LISessionManager.getInstance(getApplicationContext()).init(MainActivity.this, buildScope(), new AuthListener() {
+                    @Override
+                    public void onAuthSuccess() {
+                        // Authentication was successful.  You can now do
+                        // other calls with the SDK.
+                        String url = "https://api.linkedin.com/v1/people/~";
 
+                        APIHelper apiHelper = APIHelper.getInstance(getApplicationContext());
+                        apiHelper.getRequest(getApplicationContext(), url, new ApiListener() {
+                            @Override
+                            public void onApiSuccess(ApiResponse apiResponse) {
+                                // Success!
+                                Toast.makeText(getApplicationContext(), apiResponse.getResponseDataAsString(), Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onApiError(LIApiError liApiError) {
+                                // Error making GET request!
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onAuthError(LIAuthError error) {
+                        // Handle authentication errors
+                    }
+                }, true);
+
+            }
+        });
+
+    }
+
+
+    // Build the list of member permissions our LinkedIn session requires
+    private static com.linkedin.platform.utils.Scope buildScope() {
+        return com.linkedin.platform.utils.Scope.build(com.linkedin.platform.utils.Scope.R_BASICPROFILE, com.linkedin.platform.utils.Scope.W_SHARE);
     }
 
     @Override
@@ -190,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements
         callbackManager.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult:" + requestCode + ":" + resultCode + ":" + data);
         twitterLoginButton.onActivityResult(requestCode, resultCode, data);
+        LISessionManager.getInstance(getApplicationContext()).onActivityResult(this, requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             // If the error resolution was not successful we should not resolve further.
             if (resultCode != RESULT_OK) {
@@ -267,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStop() {
         super.onStop();
+        onSignOutClicked();
         mGoogleApiClient.disconnect();
     }
     // [END on_start_on_stop]

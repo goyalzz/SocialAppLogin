@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "E:\\Material Design\\SocialApp\\LinkedIn\\build\\intermediates\\bundles\\release\\res\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "E:\\Material Design\\SocialApp\\LinkedIn\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "E:\\Material Design\\SocialApp\\LinkedIn\\build\\intermediates\\res\\merged\\release\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "E:\\Material Design\\SocialApp\\LinkedIn\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    }
+]

@@ -117,6 +117,14 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="10dp"/>
 
+                    <ImageView
+                        android:id="@+id/linkedin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/signin"
+                        android:layout_marginBottom="10dp"/>
+
                 </LinearLayout>
 
 
